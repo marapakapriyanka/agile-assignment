@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import MediaSelectionButton from "@/components/MediaSelectionButton";
 
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
@@ -108,6 +109,22 @@ export default function Home() {
             Drop files now
           </div>
         )}
+      <div style={{ width: "100%", maxWidth: "700px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "12px 16px",
+            border: "1.5px solid #e5e7eb",
+            borderRadius: "999px",
+            width: "100%",
+            background: "#fff",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          <MediaSelectionButton />
+        </div>
       </div>
     </main>
   );
