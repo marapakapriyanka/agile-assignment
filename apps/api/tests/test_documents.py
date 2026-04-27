@@ -59,6 +59,18 @@ def test_replace_invalid_format_returns_422(tmp_path: Path, monkeypatch: pytest.
     assert response.status_code == 422
 
 
+def test_replace_path_traversal_filename_returns_422(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("app.services.document_service.get_settings", lambda: _settings(tmp_path))
+    token = make_token("Admin")
+    response = client.put(
+        "/documents",
+        files={"file": ("../escaped.txt", io.BytesIO(b"bad"), "text/plain")},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 422
+    assert not (tmp_path.parent / "escaped.txt").exists()
+
+
 def test_replace_empty_file_returns_422(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("app.services.document_service.get_settings", lambda: _settings(tmp_path))
     token = make_token("Admin")

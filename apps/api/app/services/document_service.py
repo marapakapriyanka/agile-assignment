@@ -6,8 +6,11 @@ ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 MAX_FILE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
-def validate_extension(filename: str) -> None:
-    ext = Path(filename).suffix.lower()
+def validate_filename(filename: str) -> None:
+    path = Path(filename)
+    if path.name != filename:
+        raise ValueError("Filename must not include path separators")
+    ext = path.suffix.lower()
     if ext not in ALLOWED_EXTENSIONS:
         raise ValueError(
             f"Unsupported format '{ext}'. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}"

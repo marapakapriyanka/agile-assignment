@@ -4,7 +4,7 @@ from app.api.dependencies.auth import require_admin
 from app.core.responses import not_implemented_error
 from app.schemas.common import ApiError
 from app.schemas.documents import DocumentIngestRequest, DocumentReplaceResponse
-from app.services.document_service import reindex_document, replace_document, validate_extension, validate_size
+from app.services.document_service import reindex_document, replace_document, validate_filename, validate_size
 
 router = APIRouter(tags=["documents"])
 
@@ -26,7 +26,7 @@ async def replace_document_endpoint(
     if not file.filename:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="No filename provided")
     try:
-        validate_extension(file.filename)
+        validate_filename(file.filename)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc))
     content = await file.read()
